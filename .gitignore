@@ -1,0 +1,17 @@
+build/
+bin/
+*.o
+*.obj
+*.out
+
+.DS_Store
+*.dSYM/
+
+.vscode/
+.idea/
+*.xcodeproj/
+*.xcworkspace/
+
+*.dmg
+*.zip
+*.app
