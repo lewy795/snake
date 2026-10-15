@@ -1,0 +1,49 @@
+name: Build Windows Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup MSVC & CMake
+      uses: lukka/get-cmake@latest
+
+    - name: Setup vcpkg and SFML
+      run: |
+        vcpkg install sfml:x64-windows
+
+    - name: Configure CMake
+      run: |
+        cmake -B build -DCMAKE_TOOLCHAIN_FILE=C:/vcpkg/scripts/buildsystems/vcpkg.cmake -DVCPKG_TARGET_TRIPLET=x64-windows
+
+    - name: Build Project
+      run: |
+        cmake --build build --config Release
+
+    - name: Prepare Package Folder
+      run: |
+        mkdir Snake-Windows
+        cp build/Release/Snake.exe Snake-Windows/
+        cp -r assets Snake-Windows/
+        cp C:/vcpkg/installed/x64-windows/bin/*.dll Snake-Windows/
+
+    - name: Archive Release
+      uses: thesturne/zipfile@v1
+      with:
+        files: Snake-Windows/
+        output: Snake-Windows-x64.zip
+
+    - name: Upload Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: Snake-Windows-x64
+        path: Snake-Windows-x64.zip
