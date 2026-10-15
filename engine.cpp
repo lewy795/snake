@@ -4,7 +4,11 @@
 #include <iostream>
 #include "mode/game.h"
 #include "mode/menu.h"
+
+// Sparkle jest dostępne tylko na macOS
+#ifdef __APPLE__
 #include "updater.h"
+#endif
 
 void fixWorkingDirectory(const char* argv0) {
     if (!argv0) return;
@@ -12,22 +16,20 @@ void fixWorkingDirectory(const char* argv0) {
     std::filesystem::path exePath = std::filesystem::weakly_canonical(argv0);
     std::filesystem::path resourcesPath = exePath.parent_path().parent_path() / "Resources";
 
-    // Jeśli uruchomiono z paczki .app (macOS)
     if (std::filesystem::exists(resourcesPath / "assets")) {
         std::filesystem::current_path(resourcesPath);
     } 
-    // Jeśli uruchomiono lokalnie w folderze build
     else if (std::filesystem::exists(exePath.parent_path() / "assets")) {
         std::filesystem::current_path(exePath.parent_path());
     }
 }
 
 int main(int argc, char* argv[]) {
-    // 1. Zawsze pierwsza linia main() - ustawia ścieżki przed ładowaniem zasobów
     fixWorkingDirectory(argv[0]);
 
-    // 2. Opcjonalne sprawdzenie aktualizacji Sparkle przy starcie
+#ifdef __APPLE__
     checkGameUpdates();
+#endif
 
     sf::RenderWindow window(sf::VideoMode({screenWidth, screenHeight}), "Snake");
     window.setFramerateLimit(fps);
