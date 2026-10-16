@@ -1,21 +1,17 @@
 #pragma once
-#include <SFML/Graphics/Color.hpp>
-#include <SFML/Graphics/Rect.hpp>
-#include <SFML/Graphics/Text.hpp>
-#include <SFML/Graphics/Font.hpp>
-#include <SFML/System/Vector2.hpp>
+#include <SFML/Graphics.hpp>
 #include <iostream>
+#include <string>
+#include <functional>
 #include "../objects/world.h"
-
 
 //=====================================================================
 // TEXT CLASS
 //=====================================================================
 
 class Text : public GameObject {
-
+private:
     sf::Text text;
-
     sf::Text::Style textStyle;
     sf::String content;
     sf::Color textColor;
@@ -25,29 +21,21 @@ class Text : public GameObject {
     float sumTime;
 
 public:
-
     Text(const sf::String& content, sf::Vector2f position = sf::Vector2f(0, 0),
-        int fontSize = 2, sf::Color color = sf::Color::White,
-        sf::Text::Style textStyle = sf::Text::Regular);
+         int fontSize = 2, sf::Color color = sf::Color::White,
+         sf::Text::Style textStyle = sf::Text::Regular);
 
     static void ensureFontLoaded();
 
     void update(float deltaTime = 0) override;
-
     void changeContent(sf::String newContent);
-
     void changeColor(sf::Color newColor);
-
     sf::Vector2f getSize() const;
-
     void draw(sf::RenderWindow &window) override;
 
     static bool isFontLoaded;
     static sf::Font* font;
 };
-
-
-
 
 //=====================================================================
 // BUTTON CLASS
@@ -73,12 +61,8 @@ public:
            std::function<void()> callback = nullptr);
 
     void update(float delta) override;
-
     void updateButton(const sf::Vector2f &mousePos, bool mousePressed);
-
     void changeContent(sf::String newContent);
-
     void checkClick();
-
     void draw(sf::RenderWindow& window) override;
 };

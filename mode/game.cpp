@@ -78,7 +78,16 @@ void gameOver(sf::RenderWindow &window, std::optional<sf::Event> event) {
     if (!initialized) {
         gameWorld.push_back(new Text("Game Is Over!", {centre, (float)screenHeight/3.0f}, (float)screenWidth*0.1f, sf::Color(220, 70, 70)));
         gameWorld.push_back(new Text("If want to star over again press 'Space'.", {centre, (float)screenHeight/2.0f}, (float)screenWidth*0.02f, sf::Color::White, sf::Text::Italic));
-        gameWorld.push_back(new Button(centre, middle*1.2f, (float)screenWidth*0.03f, "Zagraj ponownie.",  (float)screenWidth*0.03f, sf::Color::Transparent, sf::Color::White, [] {startGame();}));
+        gameWorld.push_back(new Button(
+            centre, 
+            middle * 1.2f, 
+            (float)screenWidth * 0.03f, 
+            "Zagraj ponownie.", 
+            static_cast<int>(screenWidth * 0.03f),
+            sf::Color::Transparent, 
+            sf::Color::White, 
+            [] { startGame(); }
+        ));
         initialized = true;
     }
 
